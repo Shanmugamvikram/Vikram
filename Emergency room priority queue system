@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Patient {
+    char name[50];
+    int age;
+    int priority; // 1 for highest priority
+};
+
+struct Node {
+    struct Patient data;
+    struct Node* next;
+};
+void enqueue(struct Node** head, struct Patient data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    new_node->data = data;
+    new_node->next = NULL;
+
+    struct Node* current = *head;
+    struct Node* prev = NULL;
+
+    while (current != NULL && current->data.priority < data.priority) {
+        prev = current;
+        current = current->next;
+    }
+
+    if (prev == NULL) {
+        new_node->next = *head;
+        *head = new_node;
+    } else {
+        prev->next = new_node;
+        new_node->next = current;
+    }
+}
+
+struct Patient dequeue(struct Node** head) {
+    if (*head == NULL) {
+        printf("Queue is empty.\n");
+        exit(1);
+    }
+
+    struct Node* temp = *head;
+    struct Patient patient = temp->data;
+    *head = (*head)->next;
+    free(temp);
+
+    return patient;
+}
+void handleEmergencyRoom(struct Node** head) {
+    struct Patient p1 = {"John Doe", 35, 1};
+    struct Patient p2 = {"Jane Smith", 50, 2};
+    struct Patient p3 = {"Alice Brown", 25, 1};
+
+    enqueue(head, p1);
+    enqueue(head, p2);
+    enqueue(head, p3);
+
+    printf("Patients in the emergency room:\n");
+    struct Node* current = *head;
+    while (current != NULL) {
+        printf("Name: %s, Age: %d, Priority: %d\n",
+               current->data.name, current->data.age, current->data.priority);
+        current = current->next;
+    }
+
+    printf("\nTreating patients...\n");
+    while (*head != NULL) {
+        struct Patient patient = dequeue(head);
+        printf("Treating patient: %s\n", patient.name);
+    }
+}
+int main() {
+    struct Node* head = NULL;
+    handleEmergencyRoom(&head);
+    return 0;
+}
