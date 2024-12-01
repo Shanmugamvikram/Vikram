@@ -1,0 +1,41 @@
+volunteers = []
+
+def add_volunteer():
+    name = input("Enter Name: ")
+    age = input("Enter Age: ")
+    phone = input("Enter Phone: ")
+    email = input("Enter Email: ")
+    volunteers.append({"name": name, "age": age, "phone": phone, "email": email})
+    print(f"Volunteer {name} added.")
+
+def view_volunteers():
+    if volunteers:
+        print("\nVolunteer List:")
+        for i, v in enumerate(volunteers, 1):
+            print(f"{i}. {v['name']} (Age: {v['age']}, Phone: {v['phone']}, Email: {v['email']})")
+    else:
+        print("No volunteers found.")
+
+def remove_volunteer():
+    name = input("Enter Name to remove: ")
+    for v in volunteers:
+        if v["name"] == name:
+            volunteers.remove(v)
+            print(f"Volunteer {name} removed.")
+            return
+    print(f"Volunteer {name} not found.")
+
+while True:
+    print("\n1. Add Volunteer\n2. View Volunteers\n3. Remove Volunteer\n4. Exit")
+    choice = input("Choose an option: ")
+    if choice == '1':
+        add_volunteer()
+    elif choice == '2':
+        view_volunteers()
+    elif choice == '3':
+        remove_volunteer()
+    elif choice == '4':
+        print("Exiting program. Goodbye!")
+        break
+    else:
+        print("Invalid choice. Please try again.")
